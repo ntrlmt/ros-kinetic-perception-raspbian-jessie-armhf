@@ -1,0 +1,11 @@
+RUN mkdir -p $HOME/catkin_ws/src
+WORKDIR /root/catkin_ws/src
+RUN rosinstall_generator desktop --rosdistro kinetic --deps --wet-only --tar > kinetic-desktop-wet.rosinstall && \
+    wstool init src kinetic-desktop-wet.rosinstall
+
+RUN mkdir -p ~/catkin_ws/external_src && \
+    cd ~/catkin_ws/external_src && \
+    wget http://sourceforge.net/projects/assimp/files/assimp-3.1/assimp-3.1.1_no_test_models.zip/download -O assimp-3.1.1_no_test_models.zip && \
+    unzip assimp-3.1.1_no_test_models.zip && \
+    cd assimp-3.1.1 && \
+    cmake . && \
