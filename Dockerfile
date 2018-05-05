@@ -1,4 +1,4 @@
-FROM rpi-raspbian-jessie-armhf-devel:latest
+FROM ntrlmt/rpi-raspbian-jessie-armhf-devel:latest
 MAINTAINER ntrlmt
 
 #ROS installation
