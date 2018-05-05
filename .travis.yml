@@ -1,0 +1,18 @@
+sudo: required
+env:
+  global:
+    - secure : "llwxCuYGoPCvphnK+7Rk2HYQJr64cPGStko5sUoMgV68v9bdYyo0Jjo2PehRgDnKRAArYvPoNZKCKiInYS/sMidCv1s+puWTcEOKavDVejvQUjgza+kKskthvbb+cEja0kzZAEkdk3qwVxnUnmAqB25PVu0LEqhEbC8dY73m3upLZDIZR9Lrbhc6cSPwHcyxNg7CcO/aoHD+D54zVPJlOWA1M1YJ4t843G9+9YxxRfTHq161n/zyNyEemUajKmBFbeLLEg4Y29Oig/jAHQEMczvhyV7oy7uTpSPoQAesIziWsmwO3Ttb1DlxIdHULgrYXtAh5/BZwxMBZTsGa15Dv8BaYiCE+pkvojYpDDxSZxjlCKWC56GwIJmeKHgdEE9dGUsPt9hyhm2+I/kKs+T5nZYjWhbRrB7fwIEgoyCYqQQb9PKzj6ephaoj2z7Itgx6FxWmoUcfbi+Ml8gJH5LmqrFPQizOlTGiF9UkKmjhT/RXh4Xmc+b4aVnUmtZktirpq4So86PQdtnKmbgDBNw4O35wUoGGcS8CU8M3uUtjiP3fBMrlun6V/0EUvfqOweY88KLxbstFnKT4xjs7OKKW2YxbTPn04i+bgyFee0kgqnygFT3ON8NDd8ECpOsLFzW8vWJI2ZYofJ/ozTeDo2KHmd6S0WnfVnrUU9eiRurJmZ8="
+services:
+- docker
+language: bash
+script:
+# prepare qemu
+- docker run --rm --privileged multiarch/qemu-user-static:register --reset
+# build image
+- docker build -t $TRAVIS_REPO_SLUG:$TRAVIS_BRANCH .
+# push image
+- >
+  if [ "$TRAVIS_BRANCH" == "latest" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+    docker login -u="$DOCKER_USER" -p="$DOCKER_PASS"
+    docker push $TRAVIS_REPO_SLUG:$TRAVIS_BRANCH
+  fi
